@@ -296,7 +296,7 @@ class Detect():
                             # print('model.predict_proba(X)', model.predict_proba(X))
                             # print('model.predict(X)',model.predict(X))
 
-                            # scores.append(max(model.predict_proba(X)[0]))
+                            scores.append(max(model.predict_proba(X)[0]))
                             # print("---------------------------")
                             # print((model.predict_proba(X)[0]))
                             # print("---------------------------")
