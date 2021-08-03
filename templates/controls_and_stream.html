@@ -82,9 +82,10 @@ function resetForms() {
         </select>
 {#        <button name="Stop Video" type="submit" value="Stop">Stop</button>#}
     </form>
-        <form action="http://dancerec.com:5000/end">
+        <form action="{{ url_for('currentstatus') }}"
              <input type="submit" value="Stop" />
         </form>
+        <button type="button" onclick="window.location.href='{{ url_for( 'currentstatus'  ) }}';">Display Table Y</button>
     </div>
 </div>
 
