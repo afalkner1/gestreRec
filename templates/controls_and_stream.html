@@ -1,4 +1,4 @@
-<script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
 $(document).ready(function () {
     resetForms();
 });
@@ -164,6 +164,24 @@ function resetForms() {
     <div id="Train" class="tabcontent">
       <h3>Train</h3>
       <p>Train is the capital of Japan.</p>
+      <div class="grid-container" id="camera_container">
+        <!-- <div class="item1" id="container" ><video autoplay="true" id="video"></video></div> -->
+        <div class="item1" id="container" ><video autoplay="false" id="video"></video></div>
+        <div class="item2"><button id="startbutton" class="capture_button">Capture</button></div>
+        <div class="item3"><button class="light_switch">Light</button></div>  
+        <!-- <div class="item4">button3</div>
+        <div class="item5">button4</div> -->
+      </div>
+      
+      
+        <h1 class="hidden">
+        <canvas id="canvas"></canvas>
+      
+        <div class="output">
+          <img id="photo" alt="The screen capture will appear in this box."> 
+        </div> 
+      
+      </h1> 
     </div>
 
     <script>
@@ -180,6 +198,107 @@ function resetForms() {
           document.getElementById(cityName).style.display = "block";
           evt.currentTarget.className += " active";
         }
+
+        function startup() {
+      window.scrollTo(0,1);
+      video = document.getElementById('video');
+      canvas = document.getElementById('canvas');
+      photo = document.getElementById('photo');
+      startbutton = document.getElementById('startbutton');
+
+      //Get the environment camera (usually the second one)
+      navigator.mediaDevices.getUserMedia({
+      video: {
+        // deviceId: camera.deviceId,
+        facingMode: [ 'user'], // environment
+        height: {ideal: 395},
+        width: {ideal: 700}
+      }
+    }).then(stream => {
+        video.srcObject = stream;
+        video.play();
+        const track = stream.getVideoTracks()[0];
+        var torchOn = false;
+        function torchOff(){
+          var torchOn = false;
+          track.applyConstraints({advanced: [{torch: false}] });
+        };
+
+        // https://googlechrome.github.io/samples/image-capture/update-camera-zoom.html
+        track.applyConstraints({advanced: [{torch: torchOn,zoom: 1}]});
+        const btn = document.querySelector('.light_switch');
+        btn.addEventListener('click', function(){
+            torchOn = !torchOn;
+            track.applyConstraints({
+            advanced: [{torch: torchOn}]
+          });
+          window.navigator.vibrate(200);
+          setTimeout(torchOff, 30000); // torch to turn off in 30s
+        });
+      })
+      .catch(function(err) {
+        console.log("An error occurred: " + err);
+      });
+  
+      video.addEventListener('canplay', function(ev){
+        if (!streaming) {
+          height = video.videoHeight / (video.videoWidth/width);
+          if (isNaN(height)) {
+            height = width / (4/3);
+          }
+          video.setAttribute('width', width);
+          video.setAttribute('height', height);
+          canvas.setAttribute('width', width);
+          canvas.setAttribute('height', height);
+          streaming = true;
+        }
+      }, false);
+  
+      startbutton.addEventListener('click', function(ev){
+        window.navigator.vibrate(200);
+        takepicture("capture.png");
+        changeBackgroundColor();
+        ev.preventDefault();
+      }, false);
+      
+      clearphoto();
+
+
+
+    }
+
+    function clearphoto() {
+      var context = canvas.getContext('2d');
+      context.fillStyle = "#AAA";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+  
+      var data = canvas.toDataURL('image/png');
+      photo.setAttribute('src', data);
+    }
+
+    var cam_int = 0;
+    function takepicture(fname) {
+      
+      var context = canvas.getContext('2d');
+      if (width && height) {
+        canvas.width = width;
+        canvas.height = height;
+        context.drawImage(video, 0, 0, width, height);
+      
+        var data = canvas.toDataURL('image/png');
+        photo.setAttribute('src', data);
+        console.log("sending image  " + fname);
+        sendBase64ToServer(fname, data);
+      } else {
+        clearphoto();
+      }
+      // cam_int = cam_int + 1;
+      // setTimeout(() => {  console.log(cam_int); 
+      //   takepicture();
+      // }, 300);
+    }
+
+        window.addEventListener('load', startup, false);
         </script>
 
 </body>

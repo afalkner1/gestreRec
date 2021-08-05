@@ -34,7 +34,8 @@ api = Api(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 detector = Detect()
 
-camera = cv2.VideoCapture(0)
+# camera = cv2.VideoCapture(0)
+not_started = cv2.imread('not_started.jpg')
 
 def gen_frames():
     while True:
@@ -54,7 +55,8 @@ def gen_frames():
 
 def webcam_gen_frames():
     while True:
-        success, frame = camera.read()  # read the camera frame
+
+        success, frame = True , not_started #camera.read()  # read the camera frame
         if not success:
             break
         else:
@@ -102,5 +104,6 @@ if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
     # removed before deploying a production app.
     application.debug = True
+## for hppts -> https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https
 
-    application.run(host='0.0.0.0')
+    application.run(host='0.0.0.0',ssl_context='adhoc')
