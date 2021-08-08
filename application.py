@@ -75,6 +75,10 @@ def index():
 def video_feed():
     return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/pose')
+def pose():
+    return render_template('pose.html')
+
 @app.route('/end')
 def currentstatus():
     average = round((sum(scores)/len(scores))*10,1)
