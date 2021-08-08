@@ -48,7 +48,7 @@ img_str_bytes = cv2.imencode('.jpg', jumping_jack)[1].tobytes()
 application = app = Flask(__name__)
 api = Api(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SECRET_KEY'] = 'secret!'
+# app.config['SECRET_KEY'] = 'secret!'
 app.config['host']='0.0.0.0'
 app.debug = True
 # socketio = SocketIO(app)
