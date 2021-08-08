@@ -50,7 +50,7 @@ api = Api(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # app.config['SECRET_KEY'] = 'secret!'
 app.config['host']='0.0.0.0'
-app.debug = True
+# app.debug = True
 # socketio = SocketIO(app)
 detector = Detect()
 
