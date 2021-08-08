@@ -1,6 +1,6 @@
 from flask import Flask, flash, redirect, request, send_file, abort, render_template, Response, stream_with_context
 from flask_restful import Resource, Api, url_for
-from flask_socketio import SocketIO
+# from flask_socketio import SocketIO
 from werkzeug.utils import secure_filename
 import json, os
 import cv2
@@ -51,7 +51,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SECRET_KEY'] = 'secret!'
 app.config['host']='0.0.0.0'
 app.debug = True
-socketio = SocketIO(app)
+# socketio = SocketIO(app)
 detector = Detect()
 
 # camera = cv2.VideoCapture(0)
@@ -151,48 +151,48 @@ def get_processed_image():
 def blaze_pose():
     return render_template('blaze_pose.html')
 
-@app.route('/processed_image')
-def processed_image():
-    return Response(get_processed_image(), mimetype='multipart/x-mixed-replace; boundary=frame')    
+# @app.route('/processed_image')
+# def processed_image():
+#     return Response(get_processed_image(), mimetype='multipart/x-mixed-replace; boundary=frame')    
 
-@socketio.on('json')
-def handle_json(json_data):
-    global loop_time, img_data, upstreamed_image
-    start = time.time()
-    try:
-        img_data = json.loads(json_data["data"])["image"].split('base64,')[1]
-        # print('img_data',img_data)
-        # print('json_data',json_data)
-        sec_data = json_data["seconds"]
-        ms_data = json_data["milliseconds"]
-        epoch = json_data["epoch"]
-        # print('sec_data',sec_data)
-        # print('ms_data',ms_data)
-        # print('epoch',epoch)
-        print('loop time',time.time()-loop_time)
-        # img_data = json_data.split('base64,')[1].split('"}''')[0]
-        # print('json_data',json_data)
-        # print('img_data',img_data)
+# @socketio.on('json')
+# def handle_json(json_data):
+#     global loop_time, img_data, upstreamed_image
+#     start = time.time()
+#     try:
+#         img_data = json.loads(json_data["data"])["image"].split('base64,')[1]
+#         # print('img_data',img_data)
+#         # print('json_data',json_data)
+#         sec_data = json_data["seconds"]
+#         ms_data = json_data["milliseconds"]
+#         epoch = json_data["epoch"]
+#         # print('sec_data',sec_data)
+#         # print('ms_data',ms_data)
+#         # print('epoch',epoch)
+#         print('loop time',time.time()-loop_time)
+#         # img_data = json_data.split('base64,')[1].split('"}''')[0]
+#         # print('json_data',json_data)
+#         # print('img_data',img_data)
 
         
-        t1 = time.time()
-        # print('epoch',epoch,'time',t1,"diff", start - t1)
-        cvimg = readb64(img_data)
-        upstreamed_image = cvimg
-        t2 = time.time()
-        # cv2.imshow('this',cvimg)
-        t3 = time.time()
-        # print('split data', t1-start)
-        # print('read64', t2-t1)
-        # print('imshow',t3-t2)
-        cv2.waitKey(1)
-        # input("wait")
-        # cv2.destroyAllWindows()
-        loop_time = time.time()
-        run_time = loop_time - start_time
-        print('run_time',run_time)
-    except:
-        print('received json: ' + str(json))
+#         t1 = time.time()
+#         # print('epoch',epoch,'time',t1,"diff", start - t1)
+#         cvimg = readb64(img_data)
+#         upstreamed_image = cvimg
+#         t2 = time.time()
+#         # cv2.imshow('this',cvimg)
+#         t3 = time.time()
+#         # print('split data', t1-start)
+#         # print('read64', t2-t1)
+#         # print('imshow',t3-t2)
+#         cv2.waitKey(1)
+#         # input("wait")
+#         # cv2.destroyAllWindows()
+#         loop_time = time.time()
+#         run_time = loop_time - start_time
+#         print('run_time',run_time)
+#     except:
+#         print('received json: ' + str(json))
 
 
 
@@ -203,5 +203,5 @@ if __name__ == "__main__":
     # application.debug = True
 ## for hppts -> https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https
 
-    # application.run()
-    socketio.run(app)
+    application.run()
+    # socketio.run(app)
