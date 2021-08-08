@@ -68,7 +68,7 @@ def index():
         #     YT_URL =request.form['YouTube URL']
         #     YT_watchID = YT_URL.split('v=')[1]
         #     detector.start(YT_watchID)
-    return render_template('controls_and_stream.html')
+    return render_template('index.html')
 
 
 @app.route('/video_feed')
@@ -79,8 +79,13 @@ def video_feed():
 def currentstatus():
     average = round((sum(scores)/len(scores))*10,1)
     detector.stop_vid()
+    scores.clear()
     return render_template('files.html', variable= average)
 
+@app.route('/scores')
+def scoreboard():
+    average = round((sum(scores) / len(scores)) * 10, 1)
+    return render_template('scoreboard.html', variable=average)
 
 # run the app.
 if __name__ == "__main__":

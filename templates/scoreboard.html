@@ -1,0 +1,72 @@
+<input type="text" maxlength="10" name="value" id='value' />
+<input type=button value="Type Name" onClick="createTable({{ variable }})">
+<div id="tab"></div>
+
+<script>
+
+function createTable(scored) {
+
+	var typename = document.getElementById('value').value;
+ 	var name = typename + ", ";
+    var score = scored + ", ";
+
+    var oldNames = localStorage.getItem("names");
+    var oldScores = localStorage.getItem("scores");
+    if(oldNames === null) oldNames = "";
+    if(oldScores === null) oldScores = "";
+
+    var newNames = oldNames + name;
+    var newScores = oldScores + score
+
+	localStorage.setItem("names", oldNames + name);
+    localStorage.setItem("scores", oldScores + score);
+
+    var table = document.getElementById('Div1');
+
+    // Create an empty <tr> element and add it to the 1st position of the table:
+    var row = table.insertRow(0);
+
+    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+
+    // Add some text to the new cells:
+    cell1.innerHTML = typename;
+    cell2.innerHTML = scored;
+
+}
+
+function showOld(){
+
+    var tab = 'tab';
+    var oldNames = localStorage.getItem("names");
+    var oldScores = localStorage.getItem("scores");
+    if(oldNames === null) oldNames = "";
+    if(oldScores === null) oldScores = "";
+
+	var schoolArr = oldNames.split(',');
+	var pctArr = oldScores.split(',');
+
+  var tar = document.getElementById(tab);
+  var table = document.createElement('TABLE');
+  table.setAttribute("id", "Div1");
+  var tbdy = document.createElement('TBODY');
+  table.appendChild(tbdy);
+  for (var j = 0; j < schoolArr.length ; j++) {
+    var tr = document.createElement('TR');
+    tbdy.appendChild(tr);
+    for (var k = 0; k < 2; k++) {
+      var td = document.createElement('TD');
+      td.width = '100';
+      if (k == 0) td.innerHTML = schoolArr[j];
+      else td.innerHTML = pctArr[j];
+      tr.appendChild(td);
+    }
+  }
+  tar.appendChild(table);
+
+}
+
+showOld();
+</script>
+
