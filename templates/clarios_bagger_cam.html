@@ -1,0 +1,335 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
+
+	<title>Mold Number Check</title>
+  <style>
+
+body {
+  background-color: rgb(0, 0, 0);
+}
+
+h1.hidden {
+  display: none;
+}
+
+#container {
+
+	margin: 0px auto;
+	width: 700px;
+	height: 395px;
+	border: 0px rgb(255, 255, 255) solid;
+}
+/* #videoElement {
+	width: 700px;
+	height: 395px;
+	background-color: rgb(0, 0, 0);
+} */
+
+.item1 { grid-area: cam_view; }
+.item2 { grid-area: button1; }
+.item3 { grid-area: button2; }
+/* .item4 { grid-area: button3; }
+.item5 { grid-area: button4; } */
+
+.capture_button {
+  background-color: #bbb;
+    display: block;
+    /* margin: 10px 0; */
+    padding: 30px;
+    width: 100%;
+    height: 100%;
+    font-size: 30px;
+    border: 30px;
+    /* margin: 10px; */
+}
+
+.light_switch {
+    background-color: #bbb;
+    display: block;
+    /* margin: 10px 0; */
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    font-size: 30px;
+}
+
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'cam_view cam_view cam_view cam_view button1'
+    'cam_view cam_view cam_view cam_view button2';
+  grid-gap: 10px;
+  background-color: rgb(0, 0, 0);
+  padding: 0px;
+}
+
+.grid-container > div {
+  background-color: rgb(0, 0, 0);
+  text-align: center;
+  padding: 0px 0;
+  font-size: 30px;
+}
+
+.camera_container_light> div {
+  background-color: rgb(255, 255, 255);
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+}
+
+  #video {
+    border: 0px solid black;
+    box-shadow: 2px 2px 3px black;
+    width:700px;
+    height:395px;
+  }
+  
+  #photo {
+    border: 0px solid black;
+    /* box-shadow: 2px 2px 3px black; */
+    width:700px;
+    height:395px;
+  }
+  
+  #canvas {
+    display:none;
+  }
+  
+  .camera {
+    width: 340px;
+    display:inline-block;
+  }
+  
+  .output {
+    width: 340px;
+    /* display:inline-block; */
+  }
+  
+  #startbutton {
+    background-color: #bbb;
+    display: block;
+    /* margin: 10px 0; */
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    font-size: 30px;
+
+  }
+  
+  .contentarea {
+    font-size: 16px;
+    font-family: "Lucida Grande", "Arial", sans-serif;
+    width: 760px;
+  }
+  </style>
+
+	<meta charset='utf-8'>
+   <script>
+
+    // The width and height of the captured photo. We will set the
+    // width to the value defined here, but the height will be
+    // calculated based on the aspect ratio of the input stream.
+  
+    var width = 320;    // We will scale the photo width to this
+    var height = 0;     // This will be computed based on the input stream
+  
+    // |streaming| indicates whether or not we're currently streaming
+    // video from the camera. Obviously, we start at false.
+  
+    var streaming = false;
+  
+    // The various HTML elements we need to configure or control. These
+    // will be set by the startup() function.
+  
+    var video = null;
+    var canvas = null;
+    var photo = null;
+    var startbutton = null;
+  
+
+
+
+    function startup() {
+      window.scrollTo(0,1);
+      video = document.getElementById('video');
+      canvas = document.getElementById('canvas');
+      photo = document.getElementById('photo');
+      startbutton = document.getElementById('startbutton');
+
+      //Get the environment camera (usually the second one)
+      navigator.mediaDevices.getUserMedia({
+      video: {
+        // deviceId: camera.deviceId,
+        facingMode: [ 'environment'],
+        height: {ideal: 395},
+        width: {ideal: 700}
+      }
+    }).then(stream => {
+        video.srcObject = stream;
+        video.play();
+        const track = stream.getVideoTracks()[0];
+        var torchOn = false;
+        function torchOff(){
+          var torchOn = false;
+          track.applyConstraints({advanced: [{torch: false}] });
+        };
+
+        // https://googlechrome.github.io/samples/image-capture/update-camera-zoom.html
+        track.applyConstraints({advanced: [{torch: torchOn,zoom: 3}]});
+        const btn = document.querySelector('.light_switch');
+        btn.addEventListener('click', function(){
+            torchOn = !torchOn;
+            track.applyConstraints({
+            advanced: [{torch: torchOn}]
+          });
+          window.navigator.vibrate(200);
+          setTimeout(torchOff, 30000); // torch to turn off in 30s
+        });
+      })
+      .catch(function(err) {
+        console.log("An error occurred: " + err);
+      });
+  
+      video.addEventListener('canplay', function(ev){
+        if (!streaming) {
+          height = video.videoHeight / (video.videoWidth/width);
+          if (isNaN(height)) {
+            height = width / (4/3);
+          }
+          video.setAttribute('width', width);
+          video.setAttribute('height', height);
+          canvas.setAttribute('width', width);
+          canvas.setAttribute('height', height);
+          streaming = true;
+        }
+      }, false);
+  
+      startbutton.addEventListener('click', function(ev){
+        window.navigator.vibrate(200);
+        takepicture("capture.png");
+        changeBackgroundColor();
+        ev.preventDefault();
+      }, false);
+      
+      clearphoto();
+
+
+
+    }
+  
+
+    function clearphoto() {
+      var context = canvas.getContext('2d');
+      context.fillStyle = "#AAA";
+      context.fillRect(0, 0, canvas.width, canvas.height);
+  
+      var data = canvas.toDataURL('image/png');
+      photo.setAttribute('src', data);
+    }
+  
+    var cam_int = 0;
+    function takepicture(fname) {
+      
+      var context = canvas.getContext('2d');
+      if (width && height) {
+        canvas.width = width;
+        canvas.height = height;
+        context.drawImage(video, 0, 0, width, height);
+      
+        var data = canvas.toDataURL('image/png');
+        photo.setAttribute('src', data);
+        console.log("sending image  " + fname);
+        sendBase64ToServer(fname, data);
+      } else {
+        clearphoto();
+      }
+      // cam_int = cam_int + 1;
+      // setTimeout(() => {  console.log(cam_int); 
+      //   takepicture();
+      // }, 300);
+    }
+    window.addEventListener('load', startup, false);
+var convertToBase64 = function(url, imagetype, callback){
+img.src = url;
+};
+
+
+
+// Here we define the function that will send the request to the server. 
+// It will accept the image name, and the base64 data as arguments
+
+var sendBase64ToServer = function(name, base64){
+  var currentHost = window.location.host;
+  console.log("currentHost  " + currentHost);
+  var httpPost = new XMLHttpRequest(),
+      path = "https://"  + location.host +  "/uploadImage/" + name,
+      data = JSON.stringify({image: base64});
+httpPost.open("POST", path, true);
+httpPost.send(data);
+};
+
+// This wrapper function will accept the name of the image, the url, and the 
+// image type and perform the request
+
+var uploadImage = function(src, name, type){
+  console.log("upload image");
+  convertToBase64(src, type, function(data){
+    sendBase64ToServer(name, data);
+});
+};
+
+// Call the function with the provided values. The mime type could also be png
+// or webp
+
+// uploadImage(imgsrc, name, 'image/jpeg')
+
+function changeBackgroundColor() {
+  setTimeout(() => {  console.log("World!"); 
+  document.body.style.backgroundColor = "black";  
+  var all = document.getElementsByClassName('grid-container');
+    for (var i = 0; i < all.length; i++) {
+      all[i].style.color = 'black';
+    }
+  }, 300);
+
+  document.body.style.backgroundColor = "white";
+  var all = document.getElementsByClassName('grid-container');
+  for (var i = 0; i < all.length; i++) {
+    all[i].style.color = 'white';
+  }
+
+}
+
+	</script>
+</head>
+
+<body>
+
+
+<div class="grid-container" id="camera_container">
+  <!-- <div class="item1" id="container" ><video autoplay="true" id="video"></video></div> -->
+  <div class="item1" id="container" ><video autoplay="false" id="video"></video></div>
+  <div class="item2"><button id="startbutton" class="capture_button">Capture</button></div>
+  <div class="item3"><button class="light_switch">Light</button></div>  
+  <!-- <div class="item4">button3</div>
+  <div class="item5">button4</div> -->
+</div>
+
+
+  <h1 class="hidden">
+  <canvas id="canvas"></canvas>
+
+  <div class="output">
+    <img id="photo" alt="The screen capture will appear in this box."> 
+  </div> 
+
+</h1> 
+
+</body>
+</html>

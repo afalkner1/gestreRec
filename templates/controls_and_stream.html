@@ -184,7 +184,17 @@ function resetForms() {
       </h1> 
     </div>
 
-    <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <script type="text/javascript" charset="utf-8">
+        var width = 320;    // We will scale the photo width to this
+        var height = 0;     // This will be computed based on the input stream
+        var streaming = false;
+        var socket = io();
+        socket.on('connect', function() {
+            socket.emit('json', {data: 'I\'m connected!'});
+            console.log('connected')
+        });
+
         function openCity(evt, cityName) {
           var i, tabcontent, tablinks;
           tabcontent = document.getElementsByClassName("tabcontent");
@@ -257,7 +267,7 @@ function resetForms() {
       startbutton.addEventListener('click', function(ev){
         window.navigator.vibrate(200);
         takepicture("capture.png");
-        changeBackgroundColor();
+        // changeBackgroundColor();
         ev.preventDefault();
       }, false);
       
@@ -292,13 +302,42 @@ function resetForms() {
       } else {
         clearphoto();
       }
-      // cam_int = cam_int + 1;
-      // setTimeout(() => {  console.log(cam_int); 
-      //   takepicture();
-      // }, 300);
+      cam_int = cam_int + 1;
+      setTimeout(() => {  
+        takepicture();
+      }, 10);
     }
 
         window.addEventListener('load', startup, false);
-        </script>
 
+
+
+
+// Here we define the function that will send the request to the server. 
+// It will accept the image name, and the base64 data as arguments
+
+var sendBase64ToServer = function(name, base64){
+  var currentHost = window.location.host;
+  console.log("currentHost  " + currentHost);
+//   var httpPost = new XMLHttpRequest(),
+//       path = "https://"  + location.host +  "/uploadImage/" + name,
+      jsdata = JSON.stringify({image: base64});
+      var time = new Date();
+
+      socket.emit('json', {data: jsdata, 'epoch':time.getTime(),'seconds':time.getSeconds(),'milliseconds':time.getMilliseconds()});
+      console.log(cam_int); 
+// httpPost.open("POST", path, true);
+// httpPost.send(data);
+};
+
+// This wrapper function will accept the name of the image, the url, and the 
+// image type and perform the request
+
+// var uploadImage = function(src, name, type){
+//   console.log("upload image");
+//   convertToBase64(src, type, function(data){
+//     sendBase64ToServer(name, data);
+// });
+// };
+        </script>
 </body>
