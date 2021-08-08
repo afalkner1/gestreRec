@@ -30,6 +30,9 @@ def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
+loop_time = 0
+start_time = time.time()
+upstreamed_image = None
 
 # some bits of text for the page.
 header_text = '''
@@ -71,9 +74,13 @@ def gen_frames():
                    b'Content-Type: image/jpeg\r\n\r\n' + img_str_bytes + b'\r\n')
 
 def webcam_gen_frames():
+    global upstreamed_image
+    success = False
     while True:
-
-        success, frame = True , not_started #camera.read()  # read the camera frame
+        if not upstreamed_image is None:
+            success, frame = True , upstreamed_image
+        else:
+            success, frame = True , not_started #camera.read()  # read the camera frame
         if not success:
             break
         else:
@@ -109,41 +116,84 @@ def video_feed():
 def webcam():
     return Response(webcam_gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/pose')
+def pose():
+    return render_template('pose.html')
+
 @app.route('/end')
 def currentstatus():
     average = round((sum(scores)/len(scores))*10,1)
     detector.stop_vid()
     return render_template('files.html', variable= average)
 
+
+
+def get_processed_image():
+    global upstreamed_image
+    success = False
+    
+    while True:
+        print('fetching processed image')
+        if not upstreamed_image is None:
+            success, frame = True , upstreamed_image # not_started #
+            # cv2.imshow('this',upstreamed_image)
+        else:
+            success, frame = True , not_started #camera.read()  # read the camera frame
+        if not success:
+            break
+        else:
+            ret, buffer = cv2.imencode('.jpg', frame)
+            frame = buffer.tobytes()
+            yield (b'--frame\r\n'
+                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')  # co
+
+@app.route('/blaze_pose')
+def blaze_pose():
+    return render_template('blaze_pose.html')
+
+@app.route('/processed_image')
+def processed_image():
+    return Response(get_processed_image(), mimetype='multipart/x-mixed-replace; boundary=frame')    
+
 @socketio.on('json')
 def handle_json(json_data):
+    global loop_time, img_data, upstreamed_image
     start = time.time()
-    img_data = json.loads(json_data["data"])["image"].split('base64,')[1]
-    # print('img_data',img_data)
-    # print('json_data',json_data)
-    sec_data = json_data["seconds"]
-    ms_data = json_data["milliseconds"]
-    epoch = json_data["epoch"]
-    print('sec_data',sec_data)
-    print('ms_data',ms_data)
-    print('epoch',epoch)
-    # img_data = json_data.split('base64,')[1].split('"}''')[0]
-    # print('json_data',json_data)
-    # print('img_data',img_data)
+    try:
+        img_data = json.loads(json_data["data"])["image"].split('base64,')[1]
+        # print('img_data',img_data)
+        # print('json_data',json_data)
+        sec_data = json_data["seconds"]
+        ms_data = json_data["milliseconds"]
+        epoch = json_data["epoch"]
+        # print('sec_data',sec_data)
+        # print('ms_data',ms_data)
+        # print('epoch',epoch)
+        print('loop time',time.time()-loop_time)
+        # img_data = json_data.split('base64,')[1].split('"}''')[0]
+        # print('json_data',json_data)
+        # print('img_data',img_data)
 
-    
-    t1 = time.time()
-    print('epoch',epoch,'time',t1,"diff", start - t1)
-    cvimg = readb64(img_data)
-    t2 = time.time()
-    cv2.imshow('this',cvimg)
-    t3 = time.time()
-    # print('split data', t1-start)
-    # print('read64', t2-t1)
-    # print('imshow',t3-t2)
-    cv2.waitKey(1)
-    # input("wait")
-    # cv2.destroyAllWindows()
+        
+        t1 = time.time()
+        # print('epoch',epoch,'time',t1,"diff", start - t1)
+        cvimg = readb64(img_data)
+        upstreamed_image = cvimg
+        t2 = time.time()
+        # cv2.imshow('this',cvimg)
+        t3 = time.time()
+        # print('split data', t1-start)
+        # print('read64', t2-t1)
+        # print('imshow',t3-t2)
+        cv2.waitKey(1)
+        # input("wait")
+        # cv2.destroyAllWindows()
+        loop_time = time.time()
+        run_time = loop_time - start_time
+        print('run_time',run_time)
+    except:
+        print('received json: ' + str(json))
+
 
 
 # run the app.

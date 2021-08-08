@@ -156,14 +156,15 @@ function resetForms() {
 
 
     <div id="Webcam" class="tabcontent">
-      <h3>Webcam</h3>
+        <iframe src="https://storage.googleapis.com/tfjs-models/demos/pose-detection/index.html?model=blazepose" style="height:500px;width:900px;"  title="blaze_pose"></iframe>
+      <!-- <h3>Webcam</h3>
       <p>Webcam is the capital of France.</p> 
-      <img src="{{ url_for('webcam') }}" width="80%" class = center>
+      <img src="{{ url_for('webcam') }}" width="80%" class = center> -->
     </div>
     
     <div id="Train" class="tabcontent">
       <h3>Train</h3>
-      <p>Train is the capital of Japan.</p>
+      <p>Client side image capture.</p>
       <div class="grid-container" id="camera_container">
         <!-- <div class="item1" id="container" ><video autoplay="true" id="video"></video></div> -->
         <div class="item1" id="container" ><video autoplay="false" id="video"></video></div>
@@ -171,17 +172,18 @@ function resetForms() {
         <div class="item3"><button class="light_switch">Light</button></div>  
         <!-- <div class="item4">button3</div>
         <div class="item5">button4</div> -->
+        <img src="{{ url_for('processed_image') }}" width="80%" class = center>
       </div>
       
       
         <h1 class="hidden">
-        <canvas id="canvas"></canvas>
-      
-        <div class="output">
-          <img id="photo" alt="The screen capture will appear in this box."> 
-        </div> 
-      
-      </h1> 
+            <canvas id="canvas"></canvas>
+        
+            <div class="output">
+            <img id="photo" alt="The screen capture will appear in this box."> 
+            </div> 
+        </h1> 
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
@@ -191,7 +193,7 @@ function resetForms() {
         var streaming = false;
         var socket = io();
         socket.on('connect', function() {
-            socket.emit('json', {data: 'I\'m connected!'});
+            // socket.emit('json', {data: 'I\'m connected!'});
             console.log('connected')
         });
 
@@ -305,7 +307,7 @@ function resetForms() {
       cam_int = cam_int + 1;
       setTimeout(() => {  
         takepicture();
-      }, 10);
+      }, 300);
     }
 
         window.addEventListener('load', startup, false);
