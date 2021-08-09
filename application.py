@@ -50,6 +50,7 @@ api = Api(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # app.config['SECRET_KEY'] = 'secret!'
 app.config['host']='0.0.0.0'
+app.config['ssl_context']='adhoc'
 # app.debug = True
 # socketio = SocketIO(app)
 detector = Detect()
@@ -105,7 +106,7 @@ def index():
         #     YT_URL =request.form['YouTube URL']
         #     YT_watchID = YT_URL.split('v=')[1]
         #     detector.start(YT_watchID)
-    return render_template('controls_and_stream.html')
+    return render_template('pose.html')  #controls_and_stream
 
 
 @app.route('/video_feed')
@@ -203,5 +204,5 @@ if __name__ == "__main__":
     # application.debug = True
 ## for hppts -> https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https
 
-    application.run()
+    application.run(ssl_context='adhoc')
     # socketio.run(app)
