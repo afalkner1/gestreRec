@@ -78,8 +78,10 @@ Although you can use them, for a more unique website, replace these images with 
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
-                	<h2 class="section-header">Scoreboard</h2>
-                    <div id="tab"></div>
+                	<h2 class="section-header">Learn to Hit It </h2>
+                    <p class="lead text-muted">Follow along to the video below. </p>
+                    <iframe width="600" height="315" src="https://www.youtube.com/embed/6cNpxLMAnGQ">
+                    </iframe>
 
                 </div>
             </div>
@@ -119,144 +121,5 @@ Although you can use them, for a more unique website, replace these images with 
 
 </html>
 
-
-<script>
-
-function showOld(){
-
-    var tab = 'tab';
-    var oldNames = localStorage.getItem("names");
-    var oldScores = localStorage.getItem("scores");
-    var oldDates = localStorage.getItem("dates");
-    if(oldNames === null) oldNames = "";
-    if(oldScores === null) oldScores = "";
-    if(oldDates === null) oldDates = "";
-
-	var schoolArr = oldNames.split(',');
-	var pctArr = oldScores.split(',');
-	var dateArr = oldDates.split(',');
-
-  var tar = document.getElementById(tab);
-  var table = document.createElement('TABLE');
-  table.setAttribute("id", "Div1");
-  var tbdy = document.createElement('TBODY');
-  table.appendChild(tbdy);
-  for (var j = 0; j < schoolArr.length ; j++) {
-    var tr = document.createElement('TR');
-    tbdy.appendChild(tr);
-    for (var k = 0; k < 3; k++) {
-      var td = document.createElement('TD');
-      td.width = '100';
-      if (k == 0) td.innerHTML = schoolArr[j];
-      else if (k == 2) td.innerHTML = dateArr[j];
-      else {
-          td.innerHTML = pctArr[j];
-      }
-      tr.appendChild(td);
-    }
-  }
-  tar.appendChild(table);
-  sortTable();
-
-}
-
-function sortTable() {
-    var table, i, x, y;
-    table = document.getElementById('Div1');
-    var switching = true;
-
-                // Run loop until no switching is needed
-    while (switching) {
-        switching = false;
-        var rows = table.rows;
-
-                    // Loop to go through all rows
-        for (i = 0; i < (rows.length - 1); i++) {
-            var Switch = false;
-
-                        // Fetch 2 elements that need to be compared
-            x = rows[i].getElementsByTagName("TD")[1];
-            y = rows[i + 1].getElementsByTagName("TD")[1];
-
-                        // Check if 2 rows need to be switched
-            if (Number(x.innerHTML)> Number(y.innerHTML))
-            {
-
-                            // If yes, mark Switch as needed and break loop
-                Switch = true;
-                break;
-            }
-        }
-        if (Switch) {
-                        // Function to switch rows and mark switch as completed
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-        }
-    }
-}
-
-showOld();
-</script>
-
-<style>
-table tr#newrow  {background-color:blue; color:white;}
-
-table {
-  border-spacing: 0;
-  width: 100%;
-    padding: 16px;
-}
-
-th, td {
-  text-align: left;
-  padding: 16px;
-}
-
-tr:nth-child(even) {
-  background-color: #f2f2f2
-}
-.score{
-   padding: 16px;
-}
-
-input[type=text] {
-
-  color: black;
-  padding: 16px 32px;
-  text-decoration: none;
-  margin: 4px 2px;
-  cursor: pointer;
-
-    padding:5px;
-    border:2px solid #ccc;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-}
-
-input[type=text]:hover {
-    background-color:#f2f2f2;
-    border-color:grey;
-}
-
-input[type=button]:hover {
-    background-color:grey;
-
-}
-
-input[type=text]:focus {
-    border-color:grey;
-}
-
-input[type=button] {
-    padding:5px 15px;
-    background:#ccc;
-    border:0 none;
-    cursor:pointer;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-}
-
-
-</style>
 
 

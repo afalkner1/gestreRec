@@ -86,6 +86,14 @@ def currentstatus():
 def scoreboard():
     return render_template('scoreboard.html', variable=average)
 
+@app.route('/billy')
+def billy():
+    return render_template('learnonda.html')
+
+@app.route('/hitit')
+def hitit():
+    return render_template('learnhitit.html')
+
 # run the app.
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
