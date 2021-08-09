@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- Template by Quackit.com -->
-<!-- Images by various sources under the Creative Commons CC0 license and/or the Creative Commons Zero license. 
+<!-- Images by various sources under the Creative Commons CC0 license and/or the Creative Commons Zero license.
 Although you can use them, for a more unique website, replace these images with your own. -->
 <html lang="en">
 
@@ -28,7 +28,7 @@ Although you can use them, for a more unique website, replace these images with 
 
     <!-- Custom Fonts from Google -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-    
+
 </head>
 
 <body>
@@ -45,7 +45,7 @@ Although you can use them, for a more unique website, replace these images with 
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="{{ url_for('index') }}">
-                	<span class="glyphicon glyphicon-fire"></span> 
+                	<span class="glyphicon glyphicon-fire"></span>
                 	DanceRec
                 </a>
             </div>
@@ -63,7 +63,6 @@ Although you can use them, for a more unique website, replace these images with 
 						<ul class="dropdown-menu" aria-labelledby="about-us">
 							<li><a href="{{ url_for('billy') }}">Billy Bounce</a></li>
 							<li><a href="{{ url_for('hitit') }}">Hit it</a></li>
-                            <li><a href="{{ url_for('live_cam') }}">Live with Camera</a></li>
 
 						</ul>
 					</li>
@@ -71,74 +70,29 @@ Although you can use them, for a more unique website, replace these images with 
                         <a href="#contact">Contact</a>
                     </li>
                 </ul>
-                
+
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container -->
     </nav>
-
-	<!-- Header -->
-    <header>
-        <div class="header-content">
-            <div class="header-content-inner">
-                <h1>Gesture Recognition</h1>
-                <p>Machine Learning and gesture regonition to see how well you can dance.</p>
-                <a href="#home_section" class="btn btn-primary btn-lg">Let's Go!</a>
-            </div>
-        </div>
-    </header>
-
-	<!-- Content 1 -->
-    <section id="home_section">
     <section class="content">
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
-                	<h2 class="section-header">Test your Dance</h2>
-                	<p class="lead text-muted">Enter the Youtube URL for your dance and press Sumbit. Press End to see your Scores! </p>
-                    <div class="form-inline">
-                    <form method="POST" name="myForm">
+                	<h2 class="section-header">Learn to Hit It </h2>
+                    <p class="lead text-muted">Follow along to the video below. </p>
+                    <iframe width="1095" height="821" src="https://dancerec.com:5000/dist/index.html">
+                    </iframe>
 
-                        <label class="lead text-muted" for="dances">Choose a dance:</label>
-                        <select name="dances" id="dances" class="lead text-muted">
-                            <option value="onda">Onda</option>
-                            <option value="control">Controller Crew</option>
-                            <option value="bounce">Billy Bounce</option>
-                            <option value="hitit">Hit it</option>
-                        </select>
-                        <div class="row">
-                        <div class="col-sm-6">
-                        <label class="lead text-muted" for="dances">URL:</label>
-                        <input name="YouTube URL">
-                            </div>
-                        </div>
-                        <div class="row">
-                        <input type="submit" class="btn btn-primary btn-lg">
-                            <a href="{{ url_for('currentstatus') }}" class="btn btn-primary btn-lg" >End</a>
-                        </div>
-                    </form>
-<!--                {#        <form action="http://dancerec.com:5000/end">#}-->
-                            
-                    </div>
-                        
                 </div>
             </div>
         </div>
     </section>
-    </section>
-    
-    <div class="container">
-        <div class="row">
-            <div style="text-align: center;">
-                <img src="{{ url_for('video_feed') }}" width="80%" class = center>
-            </div>
-        </div>
-    </div>
-    
-	<!-- Footer -->
-    <section id = "contact">
+
+    <!-- Footer -->
+    <section id="contact">
     <footer class="page-footer">
-    
-        	<!-- Contact Us -->
+
+    	<!-- Contact Us -->
         <div class="contact">
         	<div class="container">
 				<h2 class="section-heading">Contact Us</h2>
@@ -153,9 +107,9 @@ Although you can use them, for a more unique website, replace these images with 
         		<p>Copyright &copy; Alexandra Falkner, Rob Lee 2021</p>
         	</div>
         </div>
-        
+
     </footer>
-    </section>
+        </section>
     <!-- jQuery -->
     <script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
@@ -167,14 +121,5 @@ Although you can use them, for a more unique website, replace these images with 
 
 </html>
 
-<script>
-$(document).ready(function () {
-    resetForms();
-});
 
-function resetForms() {
-    document.forms['myForm'].reset();
-}
-
-</script>
 

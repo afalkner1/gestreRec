@@ -94,6 +94,10 @@ def billy():
 def hitit():
     return render_template('learnhitit.html')
 
+@app.route('/live_cam')
+def hitit():
+    return render_template('live_cam.html')
+
 # run the app.
 if __name__ == "__main__":
     # Setting debug to True enables debug output. This line should be
