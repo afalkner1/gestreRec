@@ -231,7 +231,7 @@ function sortTable() {
             y = rows[i + 1].getElementsByTagName("TD")[1];
 
                         // Check if 2 rows need to be switched
-            if (Number(x.innerHTML)> Number(y.innerHTML))
+            if (Number(x.innerHTML) < Number(y.innerHTML))
             {
 
                             // If yes, mark Switch as needed and break loop

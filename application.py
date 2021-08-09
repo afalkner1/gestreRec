@@ -77,10 +77,14 @@ def video_feed():
 
 @app.route('/end')
 def currentstatus():
-    average = round((sum(scores)/len(scores))*10,1)
+    if len(scores) != 0:
+        average = round((sum(scores)/len(scores))*10,1)
+    else:
+        average = 0
     detector.stop_vid()
     scores.clear()
     return render_template('scoreboard_new.html', variable= average)
+
 
 @app.route('/scores')
 def scoreboard():
