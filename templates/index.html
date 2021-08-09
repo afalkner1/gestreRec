@@ -44,7 +44,7 @@ Although you can use them, for a more unique website, replace these images with 
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="{{ url_for('index') }}">
                 	<span class="glyphicon glyphicon-fire"></span> 
                 	DanceRec
                 </a>
@@ -52,11 +52,11 @@ Although you can use them, for a more unique website, replace these images with 
             <!-- Navbar links -->
             <div class="collapse navbar-collapse" id="navbar">
                 <ul class="nav navbar-nav navbar-right">
-                    <li class="active">
-                        <a href="#">Home</a>
+                    <li>
+                        <a href="{{ url_for('index') }}">Home</a>
                     </li>
                     <li>
-                        <a href="{{ url_for('currentstatus') }}">Scoreboard</a>
+                        <a href="{{ url_for('scoreboard') }}">Scoreboard</a>
                     </li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Services <span class="caret"></span></a>
@@ -67,7 +67,7 @@ Although you can use them, for a more unique website, replace these images with 
 						</ul>
 					</li>
                     <li>
-                        <a href="#">Contact</a>
+                        <a href="#contact">Contact</a>
                     </li>
                 </ul>
                 
@@ -129,25 +129,27 @@ Although you can use them, for a more unique website, replace these images with 
     </div>
     
 	<!-- Footer -->
+    <section id = "contact">
     <footer class="page-footer">
     
-    	<!-- Contact Us -->
+        	<!-- Contact Us -->
         <div class="contact">
         	<div class="container">
 				<h2 class="section-heading">Contact Us</h2>
-				<p><span class="glyphicon glyphicon-earphone"></span><br> +1(23) 456 7890</p>
-				<p><span class="glyphicon glyphicon-envelope"></span><br> info@example.com</p>
+				<p><span class="glyphicon glyphicon-earphone"></span><br> +1(860) 373 4658</p>
+				<p><span class="glyphicon glyphicon-envelope"></span><br> alex.falkner@vanderbilt.edu</p>
         	</div>
         </div>
-        	
+
         <!-- Copyright etc -->
         <div class="small-print">
         	<div class="container">
-        		<p>Copyright &copy; Example.com 2015</p>
+        		<p>Copyright &copy; Alexandra Falkner, Rob Lee 2021</p>
         	</div>
         </div>
         
     </footer>
+    </section>
     <!-- jQuery -->
     <script src="{{ url_for('static', filename='js/jquery-1.11.3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>

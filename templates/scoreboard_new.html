@@ -30,7 +30,6 @@ Although you can use them, for a more unique website, replace these images with 
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
 </head>
-
 <body>
 
     <!-- Navigation -->
@@ -74,20 +73,27 @@ Although you can use them, for a more unique website, replace these images with 
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container -->
     </nav>
-    <section class="content">
+
+        <section class="content">
         <div class="container">
             <div class="row">
                 <div class="col-sm-6">
-                	<h2 class="section-header">Scoreboard</h2>
-{#                	<p class="lead text-muted">Enter your name to add your score to the scoreboard. </p>#}
+                	<h2 class="section-header">Your Score</h2>
+                    <p class="lead text-muted">Here is your average score: {{ variable }} / 10  </p>
+                	<p class="lead text-muted">Enter your name to add your score to the scoreboard. </p>
+                    <div class = "score">
+                        <form>
+                            <input type="text" name="value" id='value' required placeholder="Name">
+                            <input type=button value="Submit" onClick="createTable({{ variable }})">
+                        </form>
+                    </div>
                     <div id="tab"></div>
-
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
+        <!-- Footer -->
     <section id="contact">
     <footer class="page-footer">
 
@@ -120,8 +126,43 @@ Although you can use them, for a more unique website, replace these images with 
 
 </html>
 
-
 <script>
+
+function createTable(scored) {
+
+	var typename = document.getElementById('value').value;
+ 	var name = typename + ", ";
+    var score = scored + ", ";
+
+    var oldNames = localStorage.getItem("names");
+    var oldScores = localStorage.getItem("scores");
+    if(oldNames === null) oldNames = "";
+    if(oldScores === null) oldScores = "";
+
+    var newNames = oldNames + name;
+    var newScores = oldScores + score
+
+	localStorage.setItem("names", oldNames + name);
+    localStorage.setItem("scores", oldScores + score);
+
+    var table = document.getElementById('Div1');
+
+    // Create an empty <tr> element and add it to the 1st position of the table:
+    var row = table.insertRow(0);
+    row.setAttribute("id", "newrow");
+
+    // Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+    var cell1 = row.insertCell(0);
+    var cell2 = row.insertCell(1);
+
+    // Add some text to the new cells:
+    cell1.innerHTML = typename;
+    cell2.innerHTML = scored;
+
+    sortTable();
+
+
+}
 
 function showOld(){
 
@@ -151,20 +192,57 @@ function showOld(){
     }
   }
   tar.appendChild(table);
+  sortTable();
+
 
 }
-
 showOld();
+
+function sortTable() {
+    var table, i, x, y;
+    table = document.getElementById('Div1');
+    var switching = true;
+
+                // Run loop until no switching is needed
+    while (switching) {
+        switching = false;
+        var rows = table.rows;
+
+                    // Loop to go through all rows
+        for (i = 0; i < (rows.length - 1); i++) {
+            var Switch = false;
+
+                        // Fetch 2 elements that need to be compared
+            x = rows[i].getElementsByTagName("TD")[1];
+            y = rows[i + 1].getElementsByTagName("TD")[1];
+
+                        // Check if 2 rows need to be switched
+            if (Number(x.innerHTML)> Number(y.innerHTML))
+            {
+
+                            // If yes, mark Switch as needed and break loop
+                Switch = true;
+                break;
+            }
+        }
+        if (Switch) {
+                        // Function to switch rows and mark switch as completed
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+        }
+    }
+}
+
+
 </script>
 
 <style>
-table tr#newrow  {background-color:blue; color:white;}
+table tr#newrow  {background-color:yellowgreen; color:white;}
 
 table {
   border-spacing: 0;
   width: 100%;
   border: 2px solid #ddd;
-    padding: 16px;
 }
 
 th, td {
@@ -199,7 +277,8 @@ input[type=text]:hover {
 }
 
 input[type=button]:hover {
-    background-color:grey;
+    background-color:yellowgreen;
+    color:white;
 
 }
 
@@ -218,5 +297,4 @@ input[type=button] {
 
 
 </style>
-
 

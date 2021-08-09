@@ -80,11 +80,10 @@ def currentstatus():
     average = round((sum(scores)/len(scores))*10,1)
     detector.stop_vid()
     scores.clear()
-    return render_template('files.html', variable= average)
+    return render_template('scoreboard_new.html', variable= average)
 
 @app.route('/scores')
 def scoreboard():
-    average = round((sum(scores) / len(scores)) * 10, 1)
     return render_template('scoreboard.html', variable=average)
 
 # run the app.
