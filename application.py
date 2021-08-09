@@ -95,7 +95,7 @@ def hitit():
     return render_template('learnhitit.html')
 
 @app.route('/live_cam')
-def hitit():
+def live_cam():
     return render_template('live_cam.html')
 
 # run the app.
