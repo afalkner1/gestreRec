@@ -96,8 +96,7 @@ Although you can use them, for a more unique website, replace these images with 
                 	<p class="lead text-muted">Enter the Youtube URL for your dance and press Sumbit. Press End to see your Scores! </p>
                     <div class="form-inline">
                     <form method="POST" name="myForm">
-                        <input name="YouTube URL">
-                        
+
                         <label class="lead text-muted" for="dances">Choose a dance:</label>
                         <select name="dances" id="dances" class="lead text-muted">
                             <option value="onda">Onda</option>
@@ -105,6 +104,12 @@ Although you can use them, for a more unique website, replace these images with 
                             <option value="bounce">Billy Bounce</option>
                             <option value="hitit">Hit it</option>
                         </select>
+                        <div class="row">
+                        <div class="col-sm-6">
+                        <label class="lead text-muted" for="dances">URL:</label>
+                        <input name="YouTube URL">
+                            </div>
+                        </div>
                         <div class="row">
                         <input type="submit" class="btn btn-primary btn-lg">
                             <a href="{{ url_for('currentstatus') }}" class="btn btn-primary btn-lg" >End</a>
