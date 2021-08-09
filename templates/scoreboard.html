@@ -79,7 +79,6 @@ Although you can use them, for a more unique website, replace these images with 
             <div class="row">
                 <div class="col-sm-6">
                 	<h2 class="section-header">Scoreboard</h2>
-{#                	<p class="lead text-muted">Enter your name to add your score to the scoreboard. </p>#}
                     <div id="tab"></div>
 
                 </div>
@@ -128,11 +127,14 @@ function showOld(){
     var tab = 'tab';
     var oldNames = localStorage.getItem("names");
     var oldScores = localStorage.getItem("scores");
+    var oldDates = localStorage.getItem("dates");
     if(oldNames === null) oldNames = "";
     if(oldScores === null) oldScores = "";
+    if(oldDates === null) oldDates = "";
 
 	var schoolArr = oldNames.split(',');
 	var pctArr = oldScores.split(',');
+	var dateArr = oldDates.split(',');
 
   var tar = document.getElementById(tab);
   var table = document.createElement('TABLE');
@@ -142,16 +144,20 @@ function showOld(){
   for (var j = 0; j < schoolArr.length ; j++) {
     var tr = document.createElement('TR');
     tbdy.appendChild(tr);
-    for (var k = 0; k < 2; k++) {
+    for (var k = 0; k < 3; k++) {
       var td = document.createElement('TD');
       td.width = '100';
       if (k == 0) td.innerHTML = schoolArr[j];
-      else td.innerHTML = pctArr[j];
+      else if (k == 2) td.innerHTML = dateArr[j];
+      else {
+          td.innerHTML = pctArr[j];
+      }
       tr.appendChild(td);
     }
   }
   tar.appendChild(table);
   sortTable();
+
 }
 
 function sortTable() {
