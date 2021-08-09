@@ -100,4 +100,4 @@ if __name__ == "__main__":
     # removed before deploying a production app.
     application.debug = True
 
-    application.run(host='0.0.0.0')
+    application.run(host='0.0.0.0', port=80)
